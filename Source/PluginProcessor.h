@@ -13,7 +13,7 @@
 //==============================================================================
 /**
 */
-class BasicOscillatorAudioProcessor  : public juce::AudioProcessor
+class BasicOscillatorAudioProcessor : public juce::AudioProcessor
 {
 public:
     //==============================================================================
@@ -21,14 +21,14 @@ public:
     ~BasicOscillatorAudioProcessor() override;
 
     //==============================================================================
-    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-   #ifndef JucePlugin_PreferredChannelConfigurations
-    bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
-   #endif
+#ifndef JucePlugin_PreferredChannelConfigurations
+    bool isBusesLayoutSupported(const BusesLayout& layouts) const override;
+#endif
 
-    void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
+    void processBlock(juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
 
     //==============================================================================
     juce::AudioProcessorEditor* createEditor() override;
@@ -45,17 +45,22 @@ public:
     //==============================================================================
     int getNumPrograms() override;
     int getCurrentProgram() override;
-    void setCurrentProgram (int index) override;
-    const juce::String getProgramName (int index) override;
-    void changeProgramName (int index, const juce::String& newName) override;
+    void setCurrentProgram(int index) override;
+    const juce::String getProgramName(int index) override;
+    void changeProgramName(int index, const juce::String& newName) override;
 
     //==============================================================================
-    void getStateInformation (juce::MemoryBlock& destData) override;
-    void setStateInformation (const void* data, int sizeInBytes) override;
+    void getStateInformation(juce::MemoryBlock& destData) override;
+    void setStateInformation(const void* data, int sizeInBytes) override;
 
 private:
-    juce::dsp::Oscillator<float>osc{ [](float x) {return std::sin(x); } };
-
+    //sine wave
+    /*juce::dsp::Oscillator<float>osc{ [](float x) {return std::sin(x); } };*/
+    
+    //saw wave
+    juce::dsp::Oscillator<float>osc{ [](float x) {return x / juce::MathConstants<float>::pi; } };
+    
+    juce::dsp::Gain<float> gain;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BasicOscillatorAudioProcessor)
 };
